@@ -1,0 +1,19 @@
+{
+  "sourceSha256": "55237621497120494c5d3b6fb744c5a32697cdbcae5907c3af3347e40c01675b",
+  "date": "2026-10-14",
+  "entrance": "Narrow doorway on the right, in the white wall",
+  "referenceWidthMeters": 1,
+  "referenceSource": "User supplied doorway identification and width",
+  "status": "provisional — visual frame picks; not an approved collision or spawn configuration",
+  "framePointsRaw": [[4.429045029779105, 0.49532716478396027, 3.8504165095828835], [5.331207718752271, 0.4935626004485219, 3.8689384015406887]],
+  "horizontalWidthRaw": 0.9023528012130236,
+  "metersPerRawUnit": 1.1082139919726632,
+  "outsideFloorYRaw": -1.633416548123866,
+  "insideFloorYRaw": -1.4538223037701248,
+  "estimatedFloorRiseMeters": 0.19902885447057356,
+  "inspectionCameraRaw": [4.8801263742656875, -0.189652066183028, 5.1],
+  "inspectionTargetRaw": [4.8801263742656875, -0.189652066183028, 2.8],
+  "probeView": {"camera": [4.9, 0.1, 8], "target": [4.9, 0.1, 3.8], "viewport": [1500, 1000], "framePixels": [[613, 385], [876, 385]]},
+  "walkthroughReady": false,
+  "blockers": ["Distorted mesh surfaces obstruct the doorway", "Raised threshold requires grounded step support or a verified same-level interior start", "Room boundaries and furniture collision proxies have not been authored"]
+}

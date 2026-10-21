@@ -1,0 +1,29 @@
+{
+  "source": "house2.glb",
+  "notes": "Open passages identified from the user's 2026-10-15 recording and verified in the textured scan. Horizontal rays at raw Y=0 and -0.6/-1 pass through; downward rays confirm floor near -1.17. Hanging scan fragments at the lintels must not become floor-to-ceiling collision boxes. Coordinates are raw X/Z; this does not edit the GLB.",
+  "collisionClearances": [
+    {
+      "id": "bedroom-door",
+      "min": [
+        2.04,
+        -2.2
+      ],
+      "max": [
+        2.88,
+        -1.6
+      ]
+    },
+    {
+      "id": "right-office-door",
+      "min": [
+        6.04,
+        -1.92
+      ],
+      "max": [
+        6.88,
+        -1.28
+      ]
+    }
+  ],
+  "sha256": "bb31042d72d4f8f116954f8dd5769b242f5640d3674f9d1d78de16fa69a1f9e4"
+}

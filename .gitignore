@@ -1,0 +1,15 @@
+node_modules/
+dist/
+source-scans/
+assets-approved/
+*.blend
+*.blend1
+*.blend2
+*-original.*
+sensitive-exports/
+temporary-renders/
+.env*
+!.env.example
+test-results/
+playwright-report/
+*.log

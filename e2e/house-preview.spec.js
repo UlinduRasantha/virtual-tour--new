@@ -1,0 +1,37 @@
+import { test, expect } from '@playwright/test';
+const pose = page => page.evaluate(() => window.__tour.snapshot());
+test('House 2 walking, collision, mouse look, pause and reset', async ({ page }) => {
+  const errors=[]; page.on('pageerror', e=>errors.push(e.message));
+  await page.goto('/?mode=house');
+  await page.getByRole('button',{name:/Enter House/}).click();
+  await expect.poll(()=>page.evaluate(()=>!!document.pointerLockElement)).toBe(true);
+  await expect.poll(async()=>(await pose(page)).state).toBe('exploring');
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await page.keyboard.down('w');
+  await expect.poll(async()=>(await pose(page)).position[0],{timeout:10000}).toBeLessThan(-2);
+  await page.keyboard.up('w');
+  await page.screenshot({path:`test-results/house2-walking-${test.info().project.name}.png`});
+  const before=await pose(page); await page.mouse.move(900,400);
+  await expect.poll(async()=>(await pose(page)).yaw).not.toBeCloseTo(before.yaw);
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button',{name:/Resume tour/})).toBeVisible();
+  const paused=await pose(page); await page.keyboard.press('w'); expect((await pose(page)).position).toEqual(paused.position);
+  await page.getByRole('dialog').getByRole('button',{name:'Reset to entrance'}).click();
+  await expect.poll(async()=>(await pose(page)).position[0]).toBeCloseTo(-1);
+  await expect.poll(async()=>(await pose(page)).yaw).toBeCloseTo(Math.PI/2);
+  await page.getByRole('button',{name:/Resume tour/}).click();
+  await page.keyboard.down('w'); await page.waitForTimeout(4500); await page.keyboard.up('w');
+  const stopped=await pose(page); expect(stopped.position[0]).toBeGreaterThan(-7); expect(stopped.position[0]).toBeLessThan(-2);
+  expect(errors).toEqual([]);
+});
+test('House 2 touch walking and looking',async({page})=>{
+  await page.setViewportSize({width:390,height:844});await page.goto('/?mode=house');
+  await page.getByRole('button',{name:'Use touch / drag controls'}).click();await page.getByRole('button',{name:/Enter House/}).click();
+  const pad=await page.getByRole('group',{name:'Drag to move'}).boundingBox();
+  await page.mouse.move(pad.x+55,pad.y+70);await page.mouse.down();await page.mouse.move(pad.x+55,pad.y+15);
+  await expect.poll(async()=>(await pose(page)).position[0],{timeout:10000}).toBeLessThan(-2);await page.mouse.up();
+  const before=await pose(page),look=await page.getByRole('group',{name:'Drag to look'}).boundingBox();
+  await page.mouse.move(look.x+30,look.y+40);await page.mouse.down();await page.mouse.move(look.x+90,look.y+60,{steps:5});await page.mouse.up();
+  await expect.poll(async()=>(await pose(page)).yaw).not.toBeCloseTo(before.yaw);
+  await page.getByRole('button',{name:'Pause'}).click();await expect(page.getByRole('button',{name:/Resume tour/})).toBeVisible();
+});
