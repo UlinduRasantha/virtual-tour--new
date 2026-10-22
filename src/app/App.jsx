@@ -4,6 +4,7 @@ import TourCanvas from '../components/scene/TourCanvas.jsx';
 import Dialog from '../components/ui/Dialog.jsx';
 import MatterportCard from '../components/ui/MatterportCard.jsx';
 import TouchControls from '../components/ui/TouchControls.jsx';
+import FloorMenu from '../components/ui/FloorMenu.jsx';
 import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 import { HOUSE } from '../config/house.config.js';
 import { inspectAsset } from '../utils/inspectAsset.js';
@@ -192,6 +193,10 @@ export default function App() {
       <div className="demo-label">
         <span /> HOUSE VIRTUAL TOUR — 3D Walkthrough
       </div>
+
+      {(active || state === 'paused') && config.floors?.length > 0 && (
+        <FloorMenu floors={config.floors} hotspots={config.hotspots} onGoTo={goToLocation} />
+      )}
 
       {active && (
         <>

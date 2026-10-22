@@ -21,6 +21,12 @@ export const HOUSE = {
   },
   colliders: scan.colliders,
   hotspots: houseHotspots,
+  // Floors for the left navigation menu; hotspots join a floor via their `floor` number.
+  floors: [
+    { id: 1, label: '1st Floor' },
+    { id: 2, label: '2nd Floor' },
+    { id: 3, label: '3rd Floor' }
+  ],
   rooms: [],
   floorplan: null,
 };

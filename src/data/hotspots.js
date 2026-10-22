@@ -1,6 +1,7 @@
 export const houseHotspots = [
   {
     id: 'house-living-room',
+    floor: 2,
     title: 'Main Living Space',
     subtitle: 'Dramatic & Functional Living Area',
     category: 'Living Room',
@@ -15,6 +16,7 @@ export const houseHotspots = [
   },
   {
     id: 'house-entryway',
+    floor: 2,
     title: 'Central Hallway & Foyer',
     subtitle: 'Craftsman Architectural Passage',
     category: 'Architecture',
@@ -29,6 +31,7 @@ export const houseHotspots = [
   },
   {
     id: 'house-kitchen',
+    floor: 2,
     title: 'Kitchen & Dining Space',
     subtitle: 'Culinary & Dining Zone',
     category: 'Dining & Kitchen',
@@ -43,6 +46,7 @@ export const houseHotspots = [
   },
   {
     id: 'house-stairs',
+    floor: 2,
     title: 'Craftsman Staircase',
     subtitle: 'Switchback Multi-Level Access',
     category: 'Stairwell',
@@ -57,6 +61,7 @@ export const houseHotspots = [
   },
   {
     id: 'house-upper-floor',
+    floor: 3,
     title: 'Upper Floor Landing',
     subtitle: 'Private Living Quarters',
     category: 'Upper Level',
@@ -71,6 +76,7 @@ export const houseHotspots = [
   },
   {
     id: 'house-lower-floor',
+    floor: 1,
     title: 'Lower Level / Basement',
     subtitle: 'Storage & Work Space',
     category: 'Basement',
