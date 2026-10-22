@@ -35,3 +35,19 @@
 .mp-locations-btn:hover{background:rgba(255,255,255,0.14)}
 @media(max-width:650px){.mp-card-scrim{padding:0;align-items:flex-end}.mp-card-wrapper{max-width:100%}.mp-card{border-radius:18px 18px 0 0;max-height:80dvh;border-bottom:0}}
 
+/* House Locations List & Go to Location Buttons */
+.locations-list{display:flex;flex-direction:column;gap:8px;margin:6px 0}
+.location-row{display:flex;align-items:stretch;gap:8px;width:100%}
+.location-row .location-item{flex:1;display:flex;justify-content:space-between;align-items:center;text-align:left;font-size:13px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);transition:all .15s ease}
+.location-row .location-item:hover{background:rgba(255,255,255,0.11);border-color:rgba(255,255,255,0.25)}
+.location-item-info{display:flex;flex-direction:column;gap:2px}
+.location-title{font-weight:500;color:#f8fafc}
+.location-category{font-size:9px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase}
+.location-readmore{font-size:10px;color:var(--accent);opacity:0.9}
+.location-go-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;border-radius:10px;background:#38bdf820;border:1px solid #38bdf866;color:#e0f2fe;font-size:11px;font-weight:600;letter-spacing:0.2px;white-space:nowrap;transition:all .15s ease;min-height:44px}
+.location-go-btn:hover{background:var(--accent);border-color:var(--accent);color:#082030;transform:translateY(-1px);box-shadow:0 4px 14px rgba(56,189,248,0.35)}
+.location-go-icon{font-size:12px}
+.mp-goto-btn{background:var(--accent)!important;color:#082030!important;font-weight:600!important}
+.mp-goto-btn:hover{background:#7dd3fc!important}
+@media(max-width:520px){.location-row{flex-direction:column;gap:6px}.location-go-btn{width:100%;min-height:38px}}
+

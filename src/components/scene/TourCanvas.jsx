@@ -46,7 +46,9 @@ export default function TourCanvas({
   debug,
   inspect = false,
   onBounds,
-  navMode = 'wasd'
+  navMode = 'wasd',
+  teleportTarget,
+  onClearTeleport
 }) {
   const [clickTarget, setClickTarget] = useState(null);
 
@@ -99,6 +101,8 @@ export default function TourCanvas({
                 clickTarget={clickTarget}
                 onClearTarget={handleClearTarget}
                 navMode={navMode}
+                teleportTarget={teleportTarget}
+                onClearTeleport={onClearTeleport}
               />
               <ClickToMove
                 active={active}

@@ -80,3 +80,25 @@ test('allows choosing navigation mode (WASD vs Click-to-Move) before entering', 
   expect(screen.getByText(/Click floor to walk/)).toBeInTheDocument();
 });
 
+test('teleports directly to house locations when clicking Go to location', async () => {
+  render(<App />);
+  const enterBtn = await screen.findByRole('button', { name: /Enter House/ });
+  fireEvent.click(screen.getByRole('button', { name: /Use touch/ }));
+  fireEvent.click(enterBtn);
+
+  fireEvent.click(screen.getByRole('button', { name: 'Locations' }));
+  expect(screen.getByText('House Locations')).toBeInTheDocument();
+
+  // Find all "Go to location" buttons
+  const goButtons = screen.getAllByRole('button', { name: /Go to location/ });
+  expect(goButtons.length).toBeGreaterThan(0);
+
+  // Click the first "Go to location" button (Main Living Space)
+  fireEvent.click(goButtons[0]);
+
+  // Dialog closes, tour resumes, and arrival notice appears
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(screen.getByText(/Arrived at Main Living Space/)).toBeInTheDocument();
+});
+
+

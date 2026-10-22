@@ -13,7 +13,9 @@ export default function PlayerController({
   telemetry,
   clickTarget,
   onClearTarget,
-  navMode = 'wasd'
+  navMode = 'wasd',
+  teleportTarget,
+  onClearTeleport
 }) {
   const body = useRef(), collider = useRef(), controller = useRef();
   const { world } = useRapier();
@@ -57,6 +59,28 @@ export default function PlayerController({
     touch.current.lookX = 0;
     touch.current.lookY = 0;
   }, [resetVersion, player, camera, touch]);
+
+  // Teleport to a specified house location
+  useEffect(() => {
+    if (!teleportTarget || !teleportTarget.position) return;
+    const [x, y, z] = teleportTarget.position;
+    stuckFrames.current = 0;
+    onClearTarget?.();
+
+    body.current?.setTranslation({ x, y, z }, true);
+    body.current?.setNextKinematicTranslation({ x, y, z });
+    camera.position.set(x, y + player.eyeOffsetY, z);
+
+    if (typeof teleportTarget.yaw === 'number') {
+      camera.rotation.set(0, teleportTarget.yaw, 0, 'YXZ');
+      angles.current.set(0, teleportTarget.yaw, 0, 'YXZ');
+    }
+
+    touch.current.lookX = 0;
+    touch.current.lookY = 0;
+
+    onClearTeleport?.();
+  }, [teleportTarget, player, camera, touch, onClearTarget, onClearTeleport]);
 
   useBeforePhysicsStep(() => {
     if (!body.current || !collider.current || !controller.current) return;

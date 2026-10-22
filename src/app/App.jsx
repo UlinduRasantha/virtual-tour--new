@@ -25,6 +25,8 @@ export default function App() {
   const [notice, setNotice] = useState('');
   const [sceneFailed, setSceneFailed] = useState(false);
   const [navMode, setNavMode] = useState('wasd');
+  const [teleportTarget, setTeleportTarget] = useState(null);
+  const handleClearTeleport = useCallback(() => setTeleportTarget(null), []);
 
   const controls = useRef();
   const target = useRef();
@@ -80,6 +82,20 @@ export default function App() {
       setNotice('Mouse capture is unavailable. Use touch / drag controls below.');
     }
   };
+
+  const goToLocation = useCallback((item) => {
+    const target = item.teleport || {
+      position: [
+        item.position[0],
+        item.position[1] >= 2.5 ? 3.80 : (item.position[1] <= -0.5 ? -1.65 : 0.85),
+        item.position[2]
+      ],
+      yaw: 0
+    };
+    setTeleportTarget({ ...target, timestamp: Date.now() });
+    enter();
+    setNotice(`📍 Arrived at ${item.title}`);
+  }, [enter]);
 
   useEffect(() => {
     const fail = () => setNotice('Mouse capture was blocked. Open the tour in a browser tab, or use touch / drag controls.');
@@ -141,6 +157,8 @@ export default function App() {
               lowQuality={lowQuality}
               debug={debug}
               navMode={navMode}
+              teleportTarget={teleportTarget}
+              onClearTeleport={handleClearTeleport}
             />
           )}
         </ErrorBoundary>
@@ -365,12 +383,36 @@ export default function App() {
       {state === 'locations' && (
         <Dialog title="House Locations" onEscape={welcome}>
           <p className="muted">Points of interest in the house:</p>
-          {config.hotspots.map(item => (
-            <button className="location-item" key={item.id} onClick={() => select(item)}>
-              {item.title}
-              <span>Read more →</span>
-            </button>
-          ))}
+          <div className="locations-list">
+            {config.hotspots.map(item => (
+              <div className="location-row" key={item.id}>
+                <button
+                  type="button"
+                  className="location-item"
+                  onClick={() => select(item)}
+                  title={`View details for ${item.title}`}
+                >
+                  <div className="location-item-info">
+                    <span className="location-title">{item.title}</span>
+                    {item.category && <span className="location-category">{item.category}</span>}
+                  </div>
+                  <span className="location-readmore">Read more →</span>
+                </button>
+                <button
+                  type="button"
+                  className="location-go-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToLocation(item);
+                  }}
+                  title={`Go directly to ${item.title}`}
+                >
+                  <span className="location-go-icon">📍</span>
+                  <span>Go to location</span>
+                </button>
+              </div>
+            ))}
+          </div>
           {!config.hotspots.length && <p>No locations configured.</p>}
           <button className="primary" onClick={enter}>Resume tour</button>
         </Dialog>
@@ -381,6 +423,7 @@ export default function App() {
           hotspot={selected}
           onClose={enter}
           onLocations={() => leave('LOCATIONS')}
+          onGoTo={goToLocation}
         />
       )}
 

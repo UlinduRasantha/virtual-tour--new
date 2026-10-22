@@ -10,6 +10,7 @@ export const houseHotspots = [
     position: [1.8, 1.25, 0.5],
     stemHeight: 0.28,
     maxInteractDistance: 3.5,
+    teleport: { position: [1.5, 0.85, 0.5], yaw: -Math.PI / 2 },
     description: 'The spacious main living area of the house, featuring high ceilings, craftsman wood trim, natural lighting, and open interior space. Walk freely using WASD and mouse look.'
   },
   {
@@ -23,6 +24,7 @@ export const houseHotspots = [
     position: [0.2, 1.25, 0.5],
     stemHeight: 0.28,
     maxInteractDistance: 3.5,
+    teleport: { position: [0.35, 0.85, 0.5], yaw: 0 },
     description: 'Central connection hallway connecting the main living area, private quarters, and entry passage with rich timber wainscoting and warm ambient lighting.'
   },
   {
@@ -36,6 +38,7 @@ export const houseHotspots = [
     position: [1.5, 1.25, -1.8],
     stemHeight: 0.28,
     maxInteractDistance: 3.5,
+    teleport: { position: [1.2, 0.85, -1.2], yaw: Math.PI },
     description: 'The dining and culinary zone adjoining the main hall, featuring custom wooden cabinetry, butcher-block dining table, and natural window sunlight.'
   },
   {
@@ -49,6 +52,7 @@ export const houseHotspots = [
     position: [-0.45, 0.95, 3.2],
     stemHeight: 0.28,
     maxInteractDistance: 3.5,
+    teleport: { position: [0.2, 0.85, 2.0], yaw: 0 },
     description: 'Central wooden stairwell providing switchback passage between all floors: climb the ascending flight to the upper floor, or descend the lower flight to the basement.'
   },
   {
@@ -62,6 +66,7 @@ export const houseHotspots = [
     position: [-0.45, 3.8, 4.1],
     stemHeight: 0.28,
     maxInteractDistance: 3.5,
+    teleport: { position: [-0.05, 3.80, 4.5], yaw: Math.PI },
     description: 'Top landing of the staircase opening onto the second floor living quarters, bedrooms, and elevated viewpoints.'
   },
   {
@@ -75,6 +80,7 @@ export const houseHotspots = [
     position: [-0.45, -1.65, 3.2],
     stemHeight: 0.28,
     maxInteractDistance: 3.5,
+    teleport: { position: [0.2, -1.65, 2.0], yaw: Math.PI },
     description: 'Bottom landing of the staircase opening onto the basement rooms, laundry space, and storage area.'
   }
 ];
