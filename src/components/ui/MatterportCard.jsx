@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function MatterportCard({ hotspot, onClose, onLocations, onGoTo }) {
+export default function MatterportCard({ hotspot, onClose }) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -126,32 +126,13 @@ export default function MatterportCard({ hotspot, onClose, onLocations, onGoTo }
             <p className="mp-card-desc">{hotspot.description}</p>
 
             <div className="mp-card-footer">
-              {onGoTo && (
-                <button
-                  type="button"
-                  className="primary mp-goto-btn"
-                  onClick={() => onGoTo(hotspot)}
-                  title={`Go directly to ${hotspot.title}`}
-                >
-                  📍 Go to location
-                </button>
-              )}
               <button
                 type="button"
-                className={onGoTo ? "mp-resume-btn" : "primary mp-resume-btn"}
+                className="primary mp-resume-btn"
                 onClick={onClose}
               >
                 Resume tour
               </button>
-              {onLocations && (
-                <button
-                  type="button"
-                  className="mp-locations-btn"
-                  onClick={onLocations}
-                >
-                  All locations
-                </button>
-              )}
             </div>
           </div>
         </article>

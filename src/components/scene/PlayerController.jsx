@@ -15,7 +15,8 @@ export default function PlayerController({
   onClearTarget,
   navMode = 'wasd',
   teleportTarget,
-  onClearTeleport
+  onClearTeleport,
+  viewMode = 'walkthrough'
 }) {
   const body = useRef(), collider = useRef(), controller = useRef();
   const { world } = useRapier();
@@ -60,6 +61,17 @@ export default function PlayerController({
     touch.current.lookY = 0;
   }, [resetVersion, player, camera, touch]);
 
+  // Level camera pitch and roll when returning to first-person walkthrough
+  useEffect(() => {
+    if (viewMode === 'walkthrough') {
+      camera.rotation.x = 0;
+      camera.rotation.z = 0;
+      camera.up.set(0, 1, 0);
+      angles.current.set(0, camera.rotation.y, 0, 'YXZ');
+      camera.quaternion.setFromEuler(angles.current);
+    }
+  }, [viewMode, camera]);
+
   // Teleport to a specified house location
   useEffect(() => {
     if (!teleportTarget || !teleportTarget.position) return;
@@ -85,7 +97,7 @@ export default function PlayerController({
   useBeforePhysicsStep(() => {
     if (!body.current || !collider.current || !controller.current) return;
     const p = body.current.translation();
-    if (!active || isTextInput(document.activeElement)) {
+    if (!active || viewMode === 'upside' || isTextInput(document.activeElement)) {
       body.current.setNextKinematicTranslation(p);
       return;
     }
@@ -177,6 +189,22 @@ export default function PlayerController({
 
   useFrame(() => {
     if (!body.current) return;
+    const p = body.current.translation();
+
+    telemetry.current = {
+      position: [p.x, p.y, p.z],
+      yaw: camera.rotation.y,
+      pitch: camera.rotation.x
+    };
+    if (typeof window !== 'undefined') {
+      window.tourTelemetry = telemetry.current;
+    }
+
+    // In upside view, camera is driven by OrbitControls
+    if (viewMode === 'upside') {
+      return;
+    }
+
     if (active && (touch.current.lookX || touch.current.lookY)) {
       angles.current.setFromQuaternion(camera.quaternion, 'YXZ');
       angles.current.y -= touch.current.lookX * 0.003;
@@ -187,22 +215,25 @@ export default function PlayerController({
     touch.current.lookX = 0;
     touch.current.lookY = 0;
 
-    const p = body.current.translation();
     camera.position.set(p.x, p.y + player.eyeOffsetY, p.z);
-
-    telemetry.current = {
-      position: [p.x, p.y, p.z],
-      yaw: camera.rotation.y,
-      pitch: camera.rotation.x
-    };
-    if (typeof window !== 'undefined') {
-      window.tourTelemetry = telemetry.current;
-    }
   });
 
   return (
     <RigidBody ref={body} type="kinematicPosition" colliders={false} position={player.spawn} enabledRotations={[false, false, false]}>
       <CapsuleCollider ref={collider} args={[player.capsuleHalfHeight, player.radius]} />
+      {viewMode === 'upside' && (
+        <group>
+          {/* Avatar marker pin visible in upside view */}
+          <mesh position={[0, -player.capsuleHalfHeight + 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[0.25, 0.45, 32]} />
+            <meshBasicMaterial color="#38bdf8" depthTest={false} transparent opacity={0.85} side={2} />
+          </mesh>
+          <mesh position={[0, 0.1, 0]}>
+            <sphereGeometry args={[0.18, 16, 16]} />
+            <meshBasicMaterial color="#0284c7" depthTest={false} />
+          </mesh>
+        </group>
+      )}
     </RigidBody>
   );
 }

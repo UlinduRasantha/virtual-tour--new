@@ -30,22 +30,18 @@ test('labels house tour and offers entry', async () => {
   expect(screen.getByText(/HOUSE VIRTUAL TOUR/)).toBeInTheDocument();
 });
 
-test('touch entry, pause, locations and resume have explicit states', async () => {
+test('touch entry, pause and resume have explicit states', async () => {
   render(<App />);
   const enterBtn = await screen.findByRole('button', { name: /Enter House/ });
   fireEvent.click(screen.getByRole('button', { name: /Use touch/ }));
   fireEvent.click(enterBtn);
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole('button', { name: 'Locations' }));
-  expect(screen.getByText(/Main Living Space/)).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole('button', { name: /Main Living Space/ }));
-  expect(screen.getByText(/spacious main living area/)).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole('button', { name: 'Resume tour' }));
   fireEvent.click(screen.getByRole('button', { name: 'Pause' }));
   expect(screen.getByRole('heading', { name: 'Take a moment.' })).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', { name: 'Resume tour →' }));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 });
 
 test('allows choosing navigation mode (WASD vs Click-to-Move) before entering', async () => {
@@ -80,25 +76,18 @@ test('allows choosing navigation mode (WASD vs Click-to-Move) before entering', 
   expect(screen.getByText(/Click floor to walk/)).toBeInTheDocument();
 });
 
-test('teleports directly to house locations when clicking Go to location', async () => {
+test('Locations button and dialog are removed from HUD and keyboard shortcuts', async () => {
   render(<App />);
   const enterBtn = await screen.findByRole('button', { name: /Enter House/ });
   fireEvent.click(screen.getByRole('button', { name: /Use touch/ }));
   fireEvent.click(enterBtn);
 
-  fireEvent.click(screen.getByRole('button', { name: 'Locations' }));
-  expect(screen.getByText('House Locations')).toBeInTheDocument();
+  // Locations button is not present in HUD
+  expect(screen.queryByRole('button', { name: /Locations/i })).not.toBeInTheDocument();
 
-  // Find all "Go to location" buttons
-  const goButtons = screen.getAllByRole('button', { name: /Go to location/ });
-  expect(goButtons.length).toBeGreaterThan(0);
-
-  // Click the first "Go to location" button (Main Living Space)
-  fireEvent.click(goButtons[0]);
-
-  // Dialog closes, tour resumes, and arrival notice appears
-  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  expect(screen.getByText(/Arrived at Main Living Space/)).toBeInTheDocument();
+  // KeyL does not open locations dialog
+  fireEvent.keyDown(window, { code: 'KeyL' });
+  expect(screen.queryByText('House Locations')).not.toBeInTheDocument();
 });
 
 

@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { Box3, DoubleSide, MeshBasicMaterial, Vector3 } from 'three';
+import { Box3, DoubleSide, MeshBasicMaterial, Plane, Vector3 } from 'three';
 
-export default function HouseModel({ config, onBounds, inspect }) {
+export default function HouseModel({ config, onBounds, inspect, clippingHeight }) {
   const { camera } = useThree();
   const { scene } = useGLTF(config.modelUrl, false, false);
 
@@ -74,6 +74,24 @@ export default function HouseModel({ config, onBounds, inspect }) {
     camera.lookAt(center);
     camera.updateProjectionMatrix();
   }, [model, camera, inspect]);
+
+  const clippingPlanes = useMemo(() => {
+    if (typeof clippingHeight !== 'number') return [];
+    return [new Plane(new Vector3(0, -1, 0), clippingHeight)];
+  }, [clippingHeight]);
+
+  useEffect(() => {
+    model.traverse(o => {
+      if (o.isMesh && o.material) {
+        const mats = Array.isArray(o.material) ? o.material : [o.material];
+        mats.forEach(m => {
+          m.clippingPlanes = clippingPlanes;
+          m.clipShadows = true;
+          m.needsUpdate = true;
+        });
+      }
+    });
+  }, [model, clippingPlanes]);
 
   return <primitive object={model} dispose={null} />;
 }
